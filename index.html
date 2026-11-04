@@ -150,7 +150,7 @@ window.ADMIN_EMAILS=["ngoquocviet952004@gmail.com"];
 </script>
 <script type="module">
 const C=window.FIREBASE_CONFIG;
-if(!C||!C.apiKey){window.__FB=null;dispatchEvent(new Event('fb-ready'))}else{
+if(!C||!C.apiKey||!/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)){window.__FB=null;dispatchEvent(new Event('fb-ready'))}else{
 try{
 const A=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
 const U=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
@@ -158,7 +158,7 @@ const S=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firest
 const app=A.initializeApp(C),auth=U.getAuth(app),db=S.getFirestore(app);
 window.__FB={auth,db,GoogleAuthProvider:U.GoogleAuthProvider,signInWithPopup:U.signInWithPopup,signInWithRedirect:U.signInWithRedirect,onAuthStateChanged:U.onAuthStateChanged,signOut:U.signOut,doc:S.doc,setDoc:S.setDoc,onSnapshot:S.onSnapshot,collection:S.collection,addDoc:S.addDoc,query:S.query,where:S.where,deleteDoc:S.deleteDoc,getDocs:S.getDocs};
 U.getRedirectResult(auth).catch(()=>{});
-}catch(e){console.error(e);window.__FB=null}
+}catch(e){console.warn('Firebase chưa tải được',e);window.__FB=null}
 dispatchEvent(new Event('fb-ready'))}
 </script></head><body>
 <div id="inapp" hidden style="background:#FFF3CD;color:#5A4300;padding:10px 16px;font-size:14px;line-height:1.45">Bạn đang mở trong Zalo/Facebook nên không đăng nhập Google được. Bấm <b>⋯</b> góc trên, chọn <b>Mở bằng trình duyệt</b> (Chrome/Safari).</div>
@@ -177,6 +177,7 @@ dispatchEvent(new Event('fb-ready'))}
   <p class="lead" style="font-size:14px">Chọn nhà thuốc và tên của bạn. Tin nhắn mẫu chỉ dùng tên gọi, không ghi cả họ tên.</p>
   <div class="field"><label for="fShop">Nhà thuốc</label><select id="fShop"></select></div>
   <div class="field" id="fNvWrap"><label for="fNv">Nhân viên</label><select id="fNv"></select></div>
+  <div class="field" id="fFullW" hidden><label for="fFULL">Họ tên nhân viên (tự điền)</label><input id="fFULL" placeholder="VD: Nguyễn Thị Linh"></div>
   <div class="field"><label for="fDS">Tên dùng trong tin nhắn</label><input id="fDS" placeholder="VD: Linh"></div>
   <div class="field" id="fShopW" hidden><label for="fSHOP">Tên nhà thuốc trong tin nhắn</label><input id="fSHOP" placeholder="VD: 243 Lê Duẩn, Gio Linh"></div>
   <div class="field"><label for="fTTTC">Trung tâm tiêm chủng</label><input id="fTTTC" placeholder="VD: Trung tâm Tiêm chủng Long Châu 16 Hùng Vương, Đông Hà"></div>
@@ -372,7 +373,7 @@ function kStart(u){const F=FB();kUid=u.uid;kDoc=F.doc(F.db,'care',u.uid);kStore=
  kMgr=ADMINS.includes(String(u.email||'').toLowerCase());if(kMgr){if(!TABS.find(t=>t[0]=='giam-sat'))TABS.push(['giam-sat','Theo dõi care']);gsSub=F.onSnapshot(F.collection(F.db,'care'),s=>{GS=s.docs.map(d=>Object.assign({uid:d.id},d.data()));if((location.hash||'').slice(1)=='giam-sat')render()},e=>{fbErr=e.message})}
  render()}
 function kLoadLocal(){KL=ls.get('khach',[])}
-let kWT=null;function kWrite(now){if(kStore=='db'&&kDoc){clearTimeout(kWT);kSaveT.w=1;kWT=setTimeout(()=>{const F=FB();F.setDoc(kDoc,{ds:ME.DS||'',shop:ME.SHOPL||ME.SHOP||'',email:FBU&&FBU.email||'',capnhat:new Date().toISOString(),viecXong:KX,list:KL.map(k=>Object.assign({},k))}).catch(e=>{fbErr=e.message}).finally(()=>{delete kSaveT.w})},now?0:600)}else ls.set('khach',KL)}
+let kWT=null;function kWrite(now){if(kStore=='db'&&kDoc){clearTimeout(kWT);kSaveT.w=1;kWT=setTimeout(()=>{const F=FB();F.setDoc(kDoc,{ds:ME.DS||'',full:ME.FULL||'',shop:ME.SHOPL||ME.SHOP||'',email:FBU&&FBU.email||'',capnhat:new Date().toISOString(),viecXong:KX,list:KL.map(k=>Object.assign({},k))}).catch(e=>{fbErr=e.message}).finally(()=>{delete kSaveT.w})},now?0:600)}else ls.set('khach',KL)}
 function kPersist(k){k.capnhat=new Date().toISOString();kWrite()}
 function kDel(k){KL=KL.filter(x=>x.id!=k.id);kWrite();if(kStore=='db'){const F=FB();F.getDocs(F.query(F.collection(F.db,'care',kUid,'anh'),F.where('kid','==',k.id))).then(s=>s.docs.forEach(d=>F.deleteDoc(d.ref))).catch(()=>{})}}
 function anhWatch(){const k=curK();if(kStore!='db'||!k){if(anhSub){anhSub();anhSub=null}ANH=[];anhKid=null;return}if(anhKid==k.id)return;if(anhSub)anhSub();anhKid=k.id;ANH=[];const F=FB();anhSub=F.onSnapshot(F.query(F.collection(F.db,'care',kUid,'anh'),F.where('kid','==',k.id)),s=>{ANH=s.docs.map(d=>Object.assign({id:d.id},d.data()));const cl=$('#csList');if(cl&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#csForm'))){cl.innerHTML=csMsgs();bindSteps($('#view'))}},()=>{})}
@@ -390,7 +391,7 @@ function lydoAgg(){const M={};GS.forEach(g=>(g.list||[]).forEach(k=>Object.value
 function kqHist(k){return Object.entries(k.kq||{}).filter(x=>x[1]&&x[1].r).sort((a,b)=>+a[0]-+b[0]).map(([i,c])=>'B'+(+i+1)+': '+kqTxt(c)+(c.at?' ('+fmtD(c.at)+')':'')).join('; ')}
 function gvSub2(){const f=gsvSub;gsvSub=null;return f}
 function gvSave(items){const F=FB();F.setDoc(F.doc(F.db,'viec',gsSel),{items}).catch(e=>alertBox('Không giao được việc: '+e.message))}
-function gsExport(){const rows=GS.map(g=>({g,s:gsStat(g),nm:g.ds||g.email||'Dược sĩ chưa đặt tên'}));const tyN=Object.fromEntries(D.CS.types);const out=[];
+function gsExport(){const rows=GS.map(g=>({g,s:gsStat(g),nm:g.full||g.ds||g.email||'Dược sĩ chưa đặt tên'}));const tyN=Object.fromEntries(D.CS.types);const out=[];
  out.push(['TỔNG HỢP THEO DƯỢC SĨ']);out.push(['Dược sĩ','Nhà thuốc','Tổng khách','Đang care','Đã đi tiêm','Khách chốt','Đã lên cọc','Cân nhắc','Tham khảo thêm','Chờ người nhà','Im lặng','Từ chối','Quá hạn','Tin 7 ngày','Nhắn gần nhất']);
  rows.forEach(r=>out.push([r.nm,r.g.shop||'',r.s.n,r.s.act,r.s.xong,r.s.kc.chot,r.s.kc.coc,r.s.kc.can,r.s.kc.tk,r.s.kc.nguoi,r.s.kc.im,r.s.kc.tc,r.s.late,r.s.sent7,r.s.lastT?fmtD(r.s.lastT):'']));
  out.push([]);out.push(['CHI TIẾT TỪNG KHÁCH']);out.push(['Dược sĩ','Nhà thuốc','Khách','SĐT','Loại','Vaccine','Ngày thêm','Số ngày care','Bước care','Số tin đã gửi','Tin gần nhất','Tình trạng','Khách hẹn nhắn lại','Lịch hẹn tiêm','Ngày mũi tiếp','Kết quả gần nhất','Lịch sử kết quả từng bước','Số hình','Ghi chú','Cập nhật']);
@@ -398,7 +399,7 @@ function gsExport(){const rows=GS.map(g=>({g,s:gsStat(g),nm:g.ds||g.email||'Dư�
  out.push([]);out.push(['THEO VACCINE']);out.push(['Vaccine','Tổng khách','Đang cân nhắc','Khách chốt','Đã cọc','Đã đi tiêm','Từ chối']);vxAgg().forEach(m=>out.push([m.v,m.n,m.can,m.chot,m.coc,m.xong,m.tc]));
  out.push([]);out.push(['LÝ DO TỪ CHỐI']);out.push(['Lý do','Số lần']);lydoAgg().forEach(x=>out.push(x));
  const csv='\ufeff'+out.map(r=>r.map(csvCell).join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='bao-cao-care-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove()}
-function vGS(){if(!kMgr)return`<div class="empty">Chỉ tài khoản quản lý mới xem được phần theo dõi.</div>`;const rows=GS.map(g=>({g,s:gsStat(g),nm:g.ds||g.email||'Dược sĩ chưa đặt tên'})).sort((a,b)=>b.s.late-a.s.late||b.s.act-a.s.act);
+function vGS(){if(!kMgr)return`<div class="empty">Chỉ tài khoản quản lý mới xem được phần theo dõi.</div>`;const rows=GS.map(g=>({g,s:gsStat(g),nm:g.full||g.ds||g.email||'Dược sĩ chưa đặt tên'})).sort((a,b)=>b.s.late-a.s.late||b.s.act-a.s.act);
  const T=rows.reduce((t,r)=>{['n','act','xong','late','today','sent7'].forEach(k=>t[k]+=r.s[k]);return t},{n:0,act:0,xong:0,late:0,today:0,sent7:0});
  const sel=rows.find(r=>r.g.uid==gsSel);const tyN=Object.fromEntries(D.CS.types);
  return`<section class="sec"><h2>Theo dõi tình hình care của các bạn</h2><p class="lead">Mỗi dược sĩ đăng nhập Google và tự lưu khách trong tab "Chăm sóc qua Zalo". Tài khoản quản lý thấy được của tất cả; các bạn chỉ thấy khách của chính mình.</p>
@@ -503,11 +504,11 @@ let qt;$('#q').addEventListener('input',()=>{clearTimeout(qt);qt=setTimeout(rend
 window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0)});
 const STAFF=window.__STAFF;const dlg=$('#meDlg');
 function meFill(){const fs=$('#fShop'),fn=$('#fNv');fs.innerHTML=STAFF.map((s,i)=>`<option value="${i}">${esc(s.lab)}</option>`).join('')+'<option value="x">Nhà thuốc khác</option>';
- const si=STAFF.findIndex(s=>s.shop==ME.SHOP);fs.value=si>=0?String(si):(ME.SHOP?'x':'0');const nvOpts=()=>{const s=STAFF[+fs.value];const other=fs.value=='x';$('#fNvWrap').hidden=other;$('#fShopW').hidden=!other;if(other)return;fn.innerHTML='<option value="">— Chọn tên —</option>'+s.nv.map((n,i)=>`<option value="${i}">${esc(n[0])} · ${esc(n[2])}</option>`).join('');const ni=s.nv.findIndex(n=>n[0]==ME.FULL);fn.value=ni>=0?String(ni):''};
- nvOpts();fs.onchange=()=>{nvOpts();if(fs.value!='x'){const s=STAFF[+fs.value];$('#fTTTC').value=s.tttc;$('#fSHOP').value=s.shop;$('#fDS').value=''}else{$('#fSHOP').value='';}};
- fn.onchange=()=>{const s=STAFF[+fs.value],n=s&&s.nv[+fn.value];if(n)$('#fDS').value=n[1]};
+ const si=STAFF.findIndex(s=>s.shop==ME.SHOP);fs.value=si>=0?String(si):(ME.SHOP?'x':'0');const nvOpts=()=>{const s=STAFF[+fs.value];const other=fs.value=='x';$('#fNvWrap').hidden=other;$('#fShopW').hidden=!other;$('#fFullW').hidden=!other;if(other){$('#fFULL').value=ME.FULL||'';return}fn.innerHTML='<option value="">— Chọn tên —</option>'+s.nv.map((n,i)=>`<option value="${i}">${esc(n[0])} · ${esc(n[2])}</option>`).join('')+'<option value="__x">Tên tôi chưa có trong danh sách (tự điền)</option>';const ni=s.nv.findIndex(n=>n[0]==ME.FULL);fn.value=ni>=0?String(ni):(ME.FULL?'__x':'');$('#fFullW').hidden=fn.value!='__x';if(fn.value=='__x')$('#fFULL').value=ME.FULL||''};
+ nvOpts();fs.onchange=()=>{nvOpts();if(fs.value!='x'){const s=STAFF[+fs.value];$('#fTTTC').value=s.tttc;$('#fSHOP').value=s.shop;$('#fDS').value=''}else{$('#fSHOP').value='';$('#fTTTC').value='';$('#fDS').value=''}};
+ fn.onchange=()=>{const s=STAFF[+fs.value],n=s&&s.nv[+fn.value];$('#fFullW').hidden=fn.value!='__x';if(n)$('#fDS').value=n[1]};
  $('#fDS').value=ME.DS||'';$('#fSHOP').value=ME.SHOP||'';$('#fTTTC').value=ME.TTTC||(si>=0?STAFF[si].tttc:'')}
 $('#meBtn').onclick=()=>{meFill();try{dlg.showModal()}catch(e){dlg.setAttribute('open','')}};
-$('#meSave').onclick=()=>{const fs=$('#fShop').value,s=STAFF[+fs],n=s&&s.nv[+$('#fNv').value];ME={DS:$('#fDS').value.trim(),FULL:n?n[0]:(ME.FULL&&fs=='x'?ME.FULL:''),SHOP:fs=='x'?$('#fSHOP').value.trim():s.shop,SHOPL:fs=='x'?$('#fSHOP').value.trim():s.lab,TTTC:$('#fTTTC').value.trim()};ls.set('me',ME);dlg.close();if(kStore=='db')kWrite();render()};
+$('#meSave').onclick=()=>{const fs=$('#fShop').value,s=STAFF[+fs],nvv=$('#fNv').value,n=s&&nvv!='__x'&&s.nv[+nvv];ME={DS:$('#fDS').value.trim(),FULL:n?n[0]:($('#fFULL').value.trim()||''),SHOP:fs=='x'?$('#fSHOP').value.trim():s.shop,SHOPL:fs=='x'?$('#fSHOP').value.trim():s.lab,TTTC:$('#fTTTC').value.trim()};ls.set('me',ME);dlg.close();if(kStore=='db')kWrite();render()};
 render();kInit();
 </script><script>(function(){var b=document.getElementById('themeBtn'),r=document.documentElement;function lab(){b.textContent=r.getAttribute('data-theme')==='dark'?'☀️ Nền sáng':'🌙 Nền tối'}lab();b.onclick=function(){var d=r.getAttribute('data-theme')==='dark'?'light':'dark';r.setAttribute('data-theme',d);try{localStorage.setItem('stv_theme',d)}catch(e){}lab()}})();</script></body></html>
