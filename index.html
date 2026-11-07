@@ -210,11 +210,41 @@ function vKhach(){const g=D.DT.find(x=>x.id==selK)||D.DT[0];
  ${g.sit.length?`<section class="sec"><span class="lbl">Tình huống tại quầy</span>${g.sit.map(i=>sitHTML(i)).join('')}</section>`:''}
  ${g.vxr.length?`<section class="sec"><span class="lbl">Kịch bản chi tiết theo vaccine</span><div class="chips">${g.vxr.map(v=>`<button type="button" class="chip${FOCV.test(v)?' hot':''}" data-gov="${esc(v)}">${esc(v)}</button>`).join('')}</div></section>`:''}`}
 const FOC=/Gardasil 9|Qdenga|MenQuadfi|Nimenrix|Bexsero|Hexaxim/,FOCV=/HPV|Sốt xuất huyết|Não mô cầu/,HOT='<span class="hot-badge"><span class="fl">🔥</span>TRỌNG TÂM</span>';
-const VXM=[[/HPV|Gardasil/i,'HPV · Gardasil 9',/HPV|Gardasil/i],[/Qdenga|sốt xuất huyết/i,'Sốt xuất huyết · Qdenga',/Qdenga|sốt xuất huyết/i],[/não mô cầu|Bexsero|Nimenrix|MenQuadfi|Menactra|Mengoc/i,'Não mô cầu',/não mô cầu|Nimenrix|MenQuadfi|Bexsero/i],[/Beyfortus/i,'RSV cho bé · Beyfortus',/Beyfortus/i],[/RSV|Abrysvo/i,'RSV · Abrysvo',/RSV|Abrysvo/i],[/zona|Shingrix/i,'Zona thần kinh · Shingrix',/zona/i],[/Twinrix|viêm gan A/i,'Viêm gan A+B · Twinrix',/Twinrix|viêm gan/i],[/Nhật Bản|Imojev|Jeev/i,'Viêm não Nhật Bản',/Nhật Bản|Imojev|Jeev/i],[/sởi|quai bị|rubella|thủy đậu|MMR|Varivax|Priorix/i,'Sởi – Quai bị – Rubella, Thủy đậu',/sởi|thủy đậu|MMR/i],[/thương hàn|Typhim|mORCVAX|Vaxchora|Tả \(/i,'Tả – Thương hàn',/thương hàn|tả/i],[/6 trong 1|Hexaxim|Infanrix/i,'',/6 trong 1/i],[/cúm|Influvac|Vaxigrip/i,'',/cúm/i],[/phế cầu|Prevenar|Pneumo/i,'',/phế cầu/i],[/Boostrix|Adacel|3 trong 1|uốn ván/i,'',/3 trong 1|uốn ván|Boostrix|Adacel/i]];
+const VXM=[
+[/HPV|Gardasil/i,'HPV · Gardasil 9',/HPV|Gardasil/i,/HPV/i,/HPV|Gardasil/i],
+[/Qdenga|sốt xuất huyết/i,'Sốt xuất huyết · Qdenga',/Qdenga|sốt xuất huyết/i,/Sốt xuất huyết/i,/Sốt xuất huyết|Qdenga/i],
+[/não mô cầu|Bexsero|Nimenrix|MenQuadfi|Menactra|Mengoc/i,'Não mô cầu',/não mô cầu|Nimenrix|MenQuadfi|Bexsero/i,/Não mô cầu/i,/Não mô cầu/i],
+[/Beyfortus/i,'RSV cho bé · Beyfortus',/Beyfortus/i,null,/Beyfortus/i],
+[/RSV|Abrysvo/i,'RSV · Abrysvo',/RSV|Abrysvo/i,null,/Abrysvo/i],
+[/zona|Shingrix/i,'Zona thần kinh · Shingrix',/zona/i,null,/Zona|Shingrix/i],
+[/Twinrix|viêm gan A/i,'Viêm gan A+B · Twinrix',/Twinrix|viêm gan/i,/Viêm gan/i,/Twinrix|Viêm gan A/i],
+[/Nhật Bản|Imojev|Jeev/i,'Viêm não Nhật Bản',/Nhật Bản|Imojev|Jeev/i,/Nhật Bản/i,/Nhật Bản/i],
+[/sởi|quai bị|rubella|thủy đậu|MMR|Varivax|Priorix/i,'Sởi – Quai bị – Rubella, Thủy đậu',/sởi|thủy đậu|MMR/i,/Sởi|Quai bị|Rubella|Thủy Đậu/i,/Sởi|MMR|Thủy đậu|Quai/i],
+[/thương hàn|Typhim|mORCVAX|Vaxchora|Tả \(/i,'Tả – Thương hàn',/thương hàn|tả/i,/Thương Hàn|^Tả$/i,/Thương hàn|Tả/i],
+[/6 trong 1|Hexaxim|Infanrix/i,'',/6 trong 1/i,/Bạch Hầu|Uốn Ván|Ho Gà|Bại Liệt/i,/6 trong 1|Hexaxim|Infanrix/i],
+[/cúm|Influvac|Vaxigrip/i,'',/cúm/i,/^Cúm$/i,/Cúm/i],
+[/phế cầu|Prevenar|Pneumo/i,'',/phế cầu/i,/Phế Cầu/i,/Phế cầu/i],
+[/Boostrix|Adacel|3 trong 1|uốn ván/i,'',/3 trong 1|uốn ván|Boostrix|Adacel/i,/Bạch Hầu|Uốn Ván|Ho Gà/i,/Boostrix|Adacel|Uốn ván/i],
+[/Lao|BCG/i,'',/Lao/i,/^Lao$/i,/Lao|BCG/i],
+[/Rota/i,'',/Rota/i,/Rota/i,/Rota/i],
+[/viêm gan B/i,'',/viêm gan B/i,/Viêm gan B/i,/Viêm gan B/i]];
 const VMC={};
-function vmData(t){if(t in VMC)return VMC[t];let r=null;const m=VXM.find(x=>x[0].test(t));if(m){const nc=m[1]&&D.VX[m[1]]?(D.VX[m[1]].nc.find(n=>n[0]=='Nguy cơ')||[])[1]:'';const K=D.KM,km=[];const add=x=>{if(!km.includes(x))km.push(x)};(K.chu||[]).forEach(c=>{if(m[2].test(c[1]))c[2].forEach(add)});if(!km.length)(K.nhom||[]).forEach(g=>g[1].forEach(x=>{if(m[2].test(x))add(x)}));if(nc||km.length)r={nc:nc||'',km:km.slice(0,6),han:K.han}}VMC[t]=r;return r}
+function vmData(t){if(t in VMC)return VMC[t];let r=null;const m=VXM.find(x=>x[0].test(t));if(m){const K=D.KM,X=m[1]?D.VX[m[1]]:null,sec=[];
+ const ncv=l=>X?(X.nc.find(n=>n[0]==l)||[])[1]:'';
+ if(ncv('Nguy cơ'))sec.push(['Nguy cơ',`<div class="vxd">${esc(ncv('Nguy cơ'))}</div>`]);
+ if(ncv('Lợi ích'))sec.push(['Lợi ích',`<div class="vxd">${esc(ncv('Lợi ích'))}</div>`]);
+ if(X)X.nc.filter(n=>!/^(Nguy cơ|Lợi ích)$/.test(n[0])&&!/giá, ưu đãi|giá/i.test(n[0])).forEach(n=>sec.push([n[0],`<div class="vxd">${esc(n[1])}</div>`]));
+ if(X&&X.doi&&X.doi.length)sec.push(['Đối tượng, phác đồ',`<ul class="vxu">${X.doi.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`]);
+ if(m[3]){const kt=D.KT.filter(k=>m[3].test(k.b)).slice(0,3);if(kt.length)sec.push(['Về bệnh (để dược sĩ nắm)',kt.map(k=>`<div class="vxd"><b>${esc(k.b)}</b>${k.dl?` · Lây: ${esc(k.dl)}`:''}${k.tc?`<br>Triệu chứng: ${esc(k.tc)}`:''}${k.bc?`<br>Biến chứng: ${esc(k.bc)}`:''}</div>`).join('')])}
+ let rows=D.BG.flatMap(g=>g.r?g.r:[g]).filter(r=>m[4].test(r[0]+' '+r[1]));
+ const tl=t.toLowerCase(),nm=r=>String(r[1]).toLowerCase(),nr=rows.filter(r=>tl.includes(nm(r)));const nr2=rows.filter(r=>tl.includes(nm(r).split(' ')[0]));rows=nr.length?nr:(nr2.length?nr2:rows);
+ if(rows.length)sec.push(['Giá tham khảo',`<ul class="vxu">${rows.slice(0,6).map(r=>`<li><b>${esc(r[1])}</b>${r[5]?`: ${esc(r[5])}đ`:''}${r[6]?` · ${esc(r[6])}`:''}</li>`).join('')}</ul>`]);
+ const km=[],add=x=>{if(!km.includes(x))km.push(x)};(K.chu||[]).forEach(c=>{if(m[2].test(c[1]))c[2].forEach(add)});if(!km.length)(K.nhom||[]).forEach(g=>g[1].forEach(x=>{if(m[2].test(x))add(x)}));
+ if(km.length)sec.push([`Ưu đãi tháng 11 (${K.han})`,`<ul class="vxu">${km.slice(0,6).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`]);
+ if(X&&X.hd&&X.hd.length)sec.push(['Khách hay hỏi',X.hd.slice(0,3).map(q=>`<div class="vxd"><b>${esc(q[0])}</b><br>${esc(q[1])}</div>`).join('')]);
+ if(sec.length)r={sec}}VMC[t]=r;return r}
 const vmc=t=>vmData(t)?' has':'';
-const vmb=t=>{const d=vmData(t);return d?`<div class="vxh">Bấm để xem nguy cơ &amp; ưu đãi ▾</div><div class="vxm">${d.nc?`<div class="vxk">Nguy cơ</div><div class="vxd">${esc(d.nc)}</div>`:''}${d.km.length?`<div class="vxk">Ưu đãi tháng 11 (${esc(d.han)})</div><ul class="vxu">${d.km.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}</div>`:''};
+const vmb=t=>{const d=vmData(t);return d?`<div class="vxh">Bấm để xem nguy cơ, lợi ích, giá &amp; ưu đãi ▾</div><div class="vxm">${d.sec.map(x=>`<div class="vxk">${esc(x[0])}</div>${x[1]}`).join('')}</div>`:''};
 document.addEventListener('click',e=>{const c=e.target.closest('.vxi.has');if(c&&!e.target.closest('button,a,.copy'))c.classList.toggle('open')});
 
 function vTV(){return`<section class="sec"><h2>Thư viện kịch bản</h2><p class="lead">Nội dung đầy đủ để tra cứu khi cần. Tại quầy dùng tab 🔥 Tại quầy cho nhanh.</p><div style="display:flex;flex-direction:column;gap:8px">${SUB.map(x=>`<button type="button" class="tile" data-go="${x[0]}" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><h3 style="margin:0">${esc(x[1])}</h3><p style="margin:2px 0 0;color:var(--mut);font-size:14px">${esc(x[2])}</p></button>`).join('')}</div></section>`}
