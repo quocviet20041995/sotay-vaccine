@@ -542,9 +542,32 @@ function vCS(){if(kDraft&&kSel!=kDraft.id)kDraft=null;const C=D.CS,k=curK(),typ=
  ${k&&(k.lich||[]).length?`<details class="acc"><summary><span class="s"><h3>Lịch sử đã nhắn (${k.lich.length})</h3></span></summary><div class="in"><ul class="q">${k.lich.map(l=>`<li>${fmtD(l.t)} ${new Date(l.t).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})} · Bước ${l.b+1}: ${esc(C.steps[l.b].ten)}</li>`).join('')}</ul></div></details>`:''}
  <div class="steps" id="csList">${csMsgs()}</div></section>
  <div class="note"><b>Nhịp nhắn:</b> không quá 1 tin trong 2 ngày. Tin chăm sóc và tin bán xen kẽ nhau. Khách im lặng 2 lần thì tạm dừng 2 tuần rồi quay lại bằng tin theo mùa hoặc ưu đãi mới.</div>`}
+function kPopup(){let d=document.getElementById('kNewDlg');if(d)d.remove();d=document.createElement('dialog');d.id='kNewDlg';d.style.cssText='max-width:min(460px,calc(100vw - 24px))';document.body.appendChild(d);
+ const vl=v=>{const b=v.replace(/\s*\(.*$/,''),m=v.match(/\(([^()]*)\)\s*$/);return m&&m[1]&&!b.includes(m[1])&&!/^\d|tháng|tuổi|ưu tiên/i.test(m[1])?b+' · '+m[1]:b},st={loai:csT||'con',vx:'',q:''},pn=x=>String(x||'').replace(/\D/g,'').replace(/^84/,'0');
+ const LT=D.CS.types;
+ const draw=()=>{const keep={ten:(d.querySelector('#nTen')||{}).value||'',sdt:(d.querySelector('#nSdt')||{}).value||'',be:(d.querySelector('#nBe')||{}).value||''};
+  const all=vxOpts(st.loai),q=st.q.trim().toLowerCase(),list=all.filter(v=>!q||v.toLowerCase().includes(q));
+  d.innerHTML=`<div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">Thêm khách mới</h2><button type="button" class="btn ghost" id="nX" aria-label="Đóng">✕</button></div>
+  <div class="chips">${LT.map(x=>`<button type="button" class="chip" aria-pressed="${x[0]==st.loai}" data-nl="${x[0]}">${x[1]}</button>`).join('')}</div>
+  <div class="field"><label for="nTen">Gọi khách là</label><input id="nTen" placeholder="VD: chị Lan" value="${esc(keep.ten)}"></div>
+  <div class="field"><label for="nSdt">SĐT / Zalo</label><input id="nSdt" type="tel" inputmode="tel" placeholder="09xx xxx xxx" value="${esc(keep.sdt)}"></div>
+  ${st.loai=='con'?`<div class="field"><label for="nBe">Tên bé</label><input id="nBe" placeholder="VD: bé Bin" value="${esc(keep.be)}"></div>`:''}
+  <div class="field"><label>Vaccine đã tư vấn${st.vx?': <b>'+esc(st.vx=='__khac'?'Khác':vl(st.vx))+'</b>':''}</label><input id="nQ" type="search" placeholder="Gõ để lọc: HPV, phế cầu, cúm…" value="${esc(st.q)}" style="margin-bottom:6px"><div class="chips" style="max-height:170px;overflow:auto;padding:2px">${list.map(v=>`<button type="button" class="chip" aria-pressed="${v==st.vx}" data-nv="${esc(v)}">${esc(vl(v))}</button>`).join('')||'<small>Không có, bấm Khác để tự nhập</small>'}<button type="button" class="chip" aria-pressed="${st.vx=='__khac'}" data-nv="__khac">Khác…</button></div>${st.vx=='__khac'?'<input id="nVx" placeholder="Nhập tên vaccine" style="margin-top:6px">':''}</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="btn ghost" id="nSaveZ">Lưu và mở Zalo</button><button type="button" class="btn" id="nSave">Lưu</button></div></div>`;
+  const $q=x=>d.querySelector(x);$q('#nX').onclick=()=>d.close();
+  d.querySelectorAll('[data-nl]').forEach(b=>b.onclick=()=>{st.loai=b.dataset.nl;st.vx='';st.q='';draw()});
+  d.querySelectorAll('[data-nv]').forEach(b=>b.onclick=()=>{st.vx=st.vx==b.dataset.nv?'':b.dataset.nv;draw();if(st.vx=='__khac')setTimeout(()=>{const i=d.querySelector('#nVx');if(i)i.focus()},30)});
+  const qi=$q('#nQ');qi.oninput=()=>{st.q=qi.value;const p=qi.selectionStart;draw();const n=d.querySelector('#nQ');n.focus();n.setSelectionRange(p,p)};
+  const save=z=>{const ten=$q('#nTen').value.trim();if(!ten){$q('#nTen').focus();$q('#nTen').style.borderColor='var(--pink)';return}const sdt=$q('#nSdt').value.trim(),p=pn(sdt);
+   if(p&&KL.some(x=>pn(x.sdt)==p)&&!confirm('SĐT này đã có trong danh sách khách. Vẫn lưu thêm?'))return;
+   const vx=st.vx=='__khac'?(($q('#nVx')||{}).value||'').trim():st.vx;
+   const n={id:'k'+Date.now().toString(36),ten,sdt,loai:st.loai,be:st.loai=='con'?(($q('#nBe')||{}).value||'').trim():'',vx,hen:'',ngay:'',note:'',buoc:0,lich:[],trangthai:'dang',tao:new Date().toISOString()};
+   KL.unshift(n);kSel=n.id;kPersist(n);if(z&&p)window.open('https://zalo.me/'+p,'_blank');d.close();render();setTimeout(()=>{const l=$('#csList');if(l)window.scrollTo({top:l.getBoundingClientRect().top+scrollY-120})},60)};
+  $q('#nSave').onclick=()=>save(false);$q('#nSaveZ').onclick=()=>save(true)};
+ d.addEventListener('close',()=>d.remove());draw();d.showModal();setTimeout(()=>{const i=d.querySelector('#nTen');if(i)i.focus()},50)}
 function bindCS(v){const k=curK();anhWatch();v.querySelectorAll('#kIn,#kIn2').forEach(b=>b.onclick=signIn);const ko=v.querySelector('#kOut');if(ko)ko.onclick=e=>{e.preventDefault();FB().signOut(FB().auth)};
  v.querySelectorAll('[data-kid]').forEach(b=>b.onclick=()=>{kSel=b.dataset.kid;render();window.scrollTo({top:v.querySelector('#csForm')?v.querySelector('#csForm').getBoundingClientRect().top+scrollY-160:0})});
- const add=v.querySelector('#kAdd');if(add)add.onclick=()=>{kDraft={id:'k'+Date.now().toString(36),ten:'',sdt:'',loai:csT,be:'',vx:'',hen:'',ngay:'',note:'',buoc:0,lich:[],trangthai:'dang',tao:new Date().toISOString()};kSel=kDraft.id;render();window.scrollTo(0,0);setTimeout(()=>{const i=$('#kTen');if(i)i.focus()},50)};
+ const add=v.querySelector('#kAdd');if(add)add.onclick=()=>kPopup();
  const pn=x=>String(x||'').replace(/\D/g,'').replace(/^84/,'0');
  const doSave=(zalo)=>{const d=kDraft;if(!d)return;if(!(d.ten||'').trim()){alert('Nhập tên gọi khách trước nhé');const i=$('#kTen');if(i)i.focus();return}const p=pn(d.sdt);if(p&&KL.some(x=>pn(x.sdt)==p)&&!confirm('SĐT này đã có trong danh sách khách. Vẫn lưu thêm?'))return;d.ten=d.ten.trim();kDraft=null;KL.unshift(d);kPersist(d);if(zalo&&p)window.open('https://zalo.me/'+p,'_blank');render();setTimeout(()=>{const l=$('#csList');if(l)window.scrollTo({top:l.getBoundingClientRect().top+scrollY-120})},60)};
  const ks=v.querySelector('#kSave');if(ks)ks.onclick=()=>doSave(false);const kz=v.querySelector('#kSaveZ');if(kz)kz.onclick=()=>doSave(true);
