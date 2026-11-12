@@ -57,6 +57,7 @@ h3{font-size:15px;margin:0;font-weight:700}
 .say .tag{display:block;font-size:12px;font-weight:700;color:var(--brand-2);margin-bottom:2px}
 .say.pk2{border-left-color:var(--pink)}
 .copy{flex:none;border:1px solid var(--line);background:var(--card);color:var(--teal);font:700 12px var(--f);border-radius:8px;padding:5px 9px;cursor:pointer}
+.ssr{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:10px;overflow:hidden}.ssl{font:800 14px var(--f);padding:9px 12px;background:var(--chip)}.ssc{padding:9px 12px;font-size:14px;line-height:1.5;border-top:1px solid var(--line)}.ssc.a{background:var(--card)}.ssc.b{background:var(--teal-bg)}.ssh{display:block;font:800 11px var(--f);letter-spacing:.04em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}.ssc.b .ssh{color:var(--teal)}.ssm{padding:9px 12px;border-top:1px dashed var(--line);font-size:14px;display:flex;gap:8px;align-items:flex-start;justify-content:space-between}.ssg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.ssi{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card);display:flex;flex-direction:column;gap:2px;font-size:13px}.ssi b{font-size:14px}.ssi small{color:var(--mut)}@media (min-width:700px){.ssr{display:grid;grid-template-columns:150px 1fr 1fr}.ssl{grid-row:span 1;border-right:1px solid var(--line)}.ssc{border-top:0}.ssg{grid-template-columns:repeat(4,1fr)}}
 .copy.ok{background:var(--teal-bg);border-color:var(--teal)}
 ul.q{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
 .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
@@ -364,51 +365,51 @@ function tuoiHTML(m,keys){const L=D.TUOI.filter(x=>!keys||keys.includes(x.k));le
  <div class="vxl" style="margin-top:12px">${t.vx.map(v=>`<div class="vxi${FOCT.test(v[0])?' hot':''}${vmc(v[0])}"><div class="vxt"><span><b>${esc(v[0])}</b>${FOCT.test(v[0])?HOT:''}</span></div>${batd(v[0])?`<div class="vxd" style="font-weight:700;color:#c2410c">Mũi đầu: ${esc(batd(v[0]))}</div>`:''}<div class="vxd">${esc(v[1])}</div>${v[2]?`<div class="vxb" style="margin-top:2px">${esc(v[2])}</div>`:''}${vmb(v[0])}</div>`).join('')}</div>
  ${t.luu?`<div class="note" style="margin-top:10px">${esc(t.luu)}</div>`:''}</section>`}
 // ---- So sánh tiêm chủng mở rộng (trạm y tế) và dịch vụ Long Châu ----
-const SSRT=(h,rows,cap)=>`<div class="tbl"><table style="min-width:520px"><tr>${h.map((x,i)=>`<th${i?'':''}>${esc(x)}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>`<td${i==0?' style="font-weight:700"':''}>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>${cap?`<p class="lead" style="font-size:13px;margin-top:6px">${esc(cap)}</p>`:''}`;
-const SSTXT=(h,rows)=>rows.map(r=>r.map((c,i)=>(i?h[i]+': ':'')+c).join(' | ')).join('\n');
-function ssBlock(ten,sub,h,rows,cap,open){const id='c'+(CID++);CP[id]=ten+'\n'+SSTXT(h,rows);return`<details class="acc"${open?' open':''}><summary><span class="s"><h3>${esc(ten)}</h3>${sub?`<small>${esc(sub)}</small>`:''}</span></summary><div class="in">${SSRT(h,rows,cap)}<div style="text-align:right;margin-top:8px"><button type="button" class="copy" data-c="${id}">Sao chép bảng này</button></div></div></details>`}
-function vSS(){const H=['Tiêu chí','Tiêm chủng mở rộng (trạm y tế)','Tiêm dịch vụ (Long Châu)'];
- return`<section class="sec"><h2>Trạm y tế hay Long Châu?</h2><p class="lead">Khi khách nói “để lên trạm tiêm miễn phí”, mình không chê trạm. Trạm tiêm các mũi cơ bản rất tốt. Mình giúp khách thấy phần nào trạm chưa có hoặc khác, để chọn tiêm bổ sung hoặc tiêm dịch vụ cho phù hợp với bé.</p>
- <div class="note"><b>Nguyên tắc tư vấn:</b> khen trạm trước (“mũi miễn phí vẫn nên tiêm đủ”), sau đó nói rõ khác biệt về loại vaccine, số mũi, thời gian và chăm sóc. Không nói trạm “kém”.</div></section>
- <section class="sec"><span class="lbl">Bảng so sánh</span>
- ${ssBlock('Tổng quan','Thời gian, nhắc lịch, phục vụ, loại vaccine',H,[
- ['Thời gian làm việc','Ngày cố định trong tuần','Linh hoạt, nhiều khung giờ'],
- ['Nhắc lịch hẹn','Phụ huynh tự nhớ lịch hẹn','Sổ tiêm điện tử, tổng đài nhắc lịch'],
- ['Phục vụ','Có thể phải chờ lượt, trang thiết bị cơ bản, ít chăm sóc cá nhân','Không chờ lâu, cơ sở vật chất hiện đại, có chăm sóc sau tiêm'],
- ['Loại vaccine','Trong danh mục nhà nước, số loại có hạn','Đa dạng hơn, có nhiều bệnh ngoài danh mục'],
- ['Số mũi tiêm','Nhiều mũi hơn (tiêm riêng từng thành phần)','Ít mũi hơn (vaccine phối hợp)'],
- ['Tính toàn diện','Các bệnh trong danh mục','Cao hơn, bổ sung được bệnh ngoài danh mục']],'',true)}
- ${ssBlock('5 trong 1 và 6 trong 1','Bạch hầu, ho gà, uốn ván, viêm gan B, Hib',H,[
- ['Tên vaccine','5 trong 1 (kèm uống OPV phòng bại liệt)','6 trong 1 (đã có bại liệt dạng tiêm IPV)'],
- ['Nước sản xuất','Quinvaxem (Hàn Quốc); SII, ComBefive (Ấn Độ)','Hexaxim (Pháp); Infanrix Hexa (Bỉ)'],
- ['Số mũi mỗi buổi tiêm','5 trong 1 + OPV: 1 mũi tiêm và 1 lần uống','6 trong 1: 1 mũi tiêm'],
- ['Hoàn thành 3 mũi cơ bản','Khoảng 9 tháng (phải tiêm riêng IPV lúc 5 tháng và 9 tháng)','Khoảng 4 tháng (IPV đã nằm trong 6 trong 1, không phải lên trạm uống OPV vì IPV đã đủ miễn dịch)']],'Thông tin theo tài liệu đào tạo Long Châu. Loại vaccine thực tế tại từng trạm có thể khác nhau tùy đợt cấp.')}
- ${ssBlock('Rota (tiêu chảy do virus Rota)','',H,[
- ['Tên vaccine','Rotavin (Việt Nam)','Rotarix (Bỉ), Rotateq (Mỹ)'],
- ['Đặc tính','Chứa 1 chủng Rota (G1P)','Rotarix: 1 chủng người G1P, tạo miễn dịch chéo với 9 chủng khác lưu hành. Rotateq (ngũ giá): 5 chủng (G1, G2, G3, G4, P1A), trong đó G2P gây viêm dạ dày ruột nặng và đang gia tăng'],
- ['Nổi trội','Bảo vệ 1 chủng Rota, dữ liệu nghiên cứu còn ít','Bảo vệ niêm mạc ruột dạ dày phổ rộng hơn, nghiên cứu đầy đủ hơn, có cả chủng G2P mà Rotavin không có']],'')}
- ${ssBlock('Phế cầu','Viêm phổi, viêm màng não, viêm tai giữa, nhiễm khuẩn huyết',H,[
- ['Tên vaccine','Phế cầu 13 (Prevenar 13), thế hệ cũ','Phế cầu 20 (Prevenar 20), thế hệ mới'],
- ['Số chủng','Ngừa 13 chủng phế cầu','Ngừa 20 chủng (giữ 13 chủng cũ, thêm 7 chủng)'],
- ['Vì sao thêm 7 chủng','—','Là các chủng gây bệnh xâm lấn trên toàn cầu; liên quan bệnh cảnh nặng (viêm màng não, nhiễm khuẩn huyết, viêm phổi nặng); một số chủng có tỷ lệ tử vong cao hơn hoặc kháng kháng sinh'],
- ['Lịch tiêm','Chỉ được hỗ trợ 2 mũi cơ bản, chưa chắc đủ miễn dịch cho bé sinh non tháng','3 mũi cơ bản (bảo vệ toàn diện), phù hợp cả bé sinh đủ tháng và sinh non'],
- ['Mũi nhắc','Cần nhắc 1 mũi phế cầu 20 chủng sau 2 tuổi, tránh hở khoảng trống miễn dịch','Đủ miễn dịch nếu tiêm đủ, đúng lịch; hiện tại sau 2 tuổi chưa cần nhắc']],'Cập nhật 2026: Bộ Y tế đang thí điểm đưa phế cầu vào tiêm chủng mở rộng ở một số tỉnh ưu tiên (theo báo chí, chưa thấy Quảng Trị trong danh sách). Hỏi trạm địa phương xem đã có chưa trước khi tư vấn.')}
- ${ssBlock('Combo trẻ 9 tháng','Sởi, quai bị, rubella, thủy đậu, viêm não Nhật Bản',['Bệnh','Dịch vụ','Tiêm chủng mở rộng'],[
- ['Sởi, quai bị, rubella','Priorix (Ý): phòng cả 3 bệnh, 9 tháng đã tiêm được','Mvvac (Việt Nam): chỉ phòng sởi'],
- ['Thủy đậu','Varilrix (Bỉ): 9 tháng đã tiêm được','Không có'],
- ['Viêm não Nhật Bản','Imojev (Thái Lan): 9 tháng đã tiêm được','Jevax (Việt Nam): từ 12 tháng mới tiêm được, nhắc nhiều mũi, nhiều năm']],'Vì sao là combo này: miễn dịch từ mẹ bắt đầu giảm sau 6 tháng. Trẻ tiếp xúc môi trường mới nhiều hơn (gửi bà, mẹ đi làm, nhà trẻ). Sởi lây rất mạnh qua đường hô hấp (1 người bệnh lây 13–19 người). Bé ăn dặm nhiều thứ nên dễ trùng triệu chứng viêm não Nhật Bản.')}
- </section>
- <section class="sec"><span class="lbl">Các mũi có trong tiêm chủng mở rộng</span>${SSRT(['Bệnh','Vaccine','Thời điểm (tham khảo)'],[['Lao','BCG','Sơ sinh'],['Viêm gan B','Viêm gan B','Sơ sinh và các mũi nhắc'],['Bạch hầu, ho gà, uốn ván','DPT','2, 3, 4 tháng'],['Bại liệt','OPV / IPV','2, 3, 4 tháng'],['Viêm phổi, viêm màng não do Hib','Hib','2, 3, 4 tháng'],['Sởi, Rubella','MR','9 tháng'],['Viêm não Nhật Bản','JEV','Từ 12 tháng'],['Tiêu chảy do Rota','Rota','2 đến 6 tháng (tùy triển khai)']],'Lịch cụ thể do trạm y tế địa phương hướng dẫn.')}</section>
- <section class="sec"><span class="lbl">Những mũi KHÔNG có trong tiêm chủng mở rộng</span>${SSRT(['Vaccine dịch vụ','Phòng bệnh','Ý nghĩa với trẻ dưới 2 tuổi'],[['Phế cầu (PCV 10/13/15/20)','Viêm phổi, viêm màng não, nhiễm khuẩn huyết','Nguyên nhân nhập viện và tử vong hàng đầu ở trẻ nhỏ'],['Não mô cầu (AC, B)','Viêm màng não, sốc nhiễm khuẩn','Bệnh diễn tiến nhanh, nguy hiểm'],['Cúm mùa','Cúm và biến chứng hô hấp','Trẻ dưới 2 tuổi rất dễ biến chứng'],['Thủy đậu','Thủy đậu và biến chứng','Không có trong tiêm chủng mở rộng'],['Viêm gan A','Viêm gan A','Lây qua ăn uống, sinh hoạt'],['6 trong 1 / 5 trong 1 dịch vụ','Như tiêm chủng mở rộng nhưng phối hợp','Giảm số mũi tiêm, giảm đau']],'')}
- ${(()=>{const id='c'+(CID++);CP[id]=SSTXT(['Vaccine','Phòng bệnh','Ý nghĩa'],[['Phế cầu','Viêm phổi, viêm màng não','Nguyên nhân nhập viện hàng đầu ở trẻ nhỏ'],['Não mô cầu','Viêm màng não, sốc nhiễm khuẩn','Diễn tiến nhanh'],['Cúm mùa','Cúm, biến chứng hô hấp','Trẻ dưới 2 tuổi dễ biến chứng'],['Thủy đậu','Thủy đậu','Không có trong TCMR'],['Viêm gan A','Viêm gan A','Lây qua ăn uống'],['6 trong 1 / 5 trong 1 dịch vụ','Như TCMR, phối hợp','Giảm số mũi, giảm đau']]);return`<div style="text-align:right;margin-top:8px"><button type="button" class="copy" data-c="${id}">Sao chép bảng này</button></div>`})()}</section>
- <section class="sec"><span class="lbl">Câu nói gợi ý khi khách chọn tiêm trạm</span>
- ${say('Dạ mũi miễn phí ở trạm mình vẫn nên tiêm đủ chị nhé. Tuy nhiên với bé dưới 2 tuổi, ngoài các mũi miễn phí thì vẫn còn một số bệnh nặng mà chương trình nhà nước chưa có vaccine, mình tiêm bổ sung thì bé được bảo vệ đầy đủ hơn ạ.','Mở đầu')}
- ${say('Phế cầu là nguyên nhân hàng đầu gây viêm phổi và viêm màng não ở trẻ dưới 2 tuổi. Hiện tiêm chủng mở rộng chưa có mũi này ở nhiều nơi, nên nếu mình muốn phòng bệnh hô hấp nặng cho bé thì cần tiêm dịch vụ ạ.','Phế cầu')}
- ${say('Não mô cầu diễn tiến rất nhanh, có bé sáng sốt, chiều đã trở nặng. Nên nếu gia đình muốn yên tâm hơn thì mình nên tiêm thêm mũi này chị nhé.','Não mô cầu')}
- ${say('Cúm ở người lớn thường nhẹ, nhưng trẻ nhỏ có thể viêm phổi, bội nhiễm. Hầu hết các bé tiêm dịch vụ đều được khuyên tiêm cúm hằng năm ạ.','Cúm')}
- ${say('Bên em có 6 trong 1 chỉ 1 mũi tiêm, bé đỡ đau và đỡ phải đi nhiều lần. 3 mũi cơ bản hoàn thành sớm hơn nhiều so với tiêm 5 trong 1 kèm uống bại liệt ạ.','6 trong 1')}
- ${say('Mình có thể vừa tiêm mũi miễn phí ở trạm, vừa tiêm bổ sung phế cầu, não mô cầu, cúm ở Long Châu. Em đặt lịch, nhắc lịch cho mình, mình chọn giờ nào tiện nhất ạ.','Tiêm kết hợp')}</section>
- <p class="lead" style="font-size:13px">Nguồn: tài liệu đào tạo Trung tâm Đào tạo FPT Long Châu. Mục cập nhật 2026 theo thông tin báo chí về Quyết định 2780/QĐ-BYT của Bộ Y tế, cần kiểm tra lại tại trạm y tế địa phương.</p>`}
+let ssT=ls.get('ssT','tq');
+const SS=[
+ {id:'tq',ten:'Tổng quan',hoi:'Khách nói: "Để lên trạm tiêm miễn phí cho rồi"',chot:'Khen trạm trước, rồi nói rõ khác biệt về thời gian, số mũi, loại vaccine và chăm sóc. Không chê trạm.',
+  rows:[['Thời gian','Ngày cố định trong tuần','Linh hoạt, nhiều khung giờ'],['Nhắc lịch','Phụ huynh tự nhớ lịch hẹn','Sổ tiêm điện tử, tổng đài nhắc lịch'],['Phục vụ','Có thể phải chờ lượt, trang thiết bị cơ bản, ít chăm sóc cá nhân','Không chờ lâu, cơ sở vật chất hiện đại, có chăm sóc sau tiêm'],['Loại vaccine','Trong danh mục nhà nước, số loại có hạn','Đa dạng hơn, có cả bệnh ngoài danh mục'],['Số mũi','Nhiều mũi hơn (tiêm riêng từng thành phần)','Ít mũi hơn (vaccine phối hợp)']],
+  say:[['Mở đầu','Dạ mũi miễn phí ở trạm mình vẫn nên tiêm đủ chị nhé. Tuy nhiên với bé dưới 2 tuổi, ngoài các mũi miễn phí thì vẫn còn một số bệnh nặng mà chương trình nhà nước chưa có vaccine, mình tiêm bổ sung thì bé được bảo vệ đầy đủ hơn ạ.'],['Tiêm kết hợp','Mình có thể vừa tiêm mũi miễn phí ở trạm, vừa tiêm bổ sung phế cầu, não mô cầu, cúm ở Long Châu. Em đặt lịch, nhắc lịch cho mình, mình chọn giờ nào tiện nhất ạ.']]},
+ {id:'co',ten:'Trạm có gì',hoi:'Khách hỏi: "Trạm tiêm những mũi nào, còn thiếu gì?"',chot:'Mũi miễn phí vẫn nên tiêm đủ. Phần "chưa có" là chỗ mình tư vấn bổ sung.',
+  co:[['Lao','BCG','Sơ sinh'],['Viêm gan B','Viêm gan B','Sơ sinh và các mũi nhắc'],['Bạch hầu, ho gà, uốn ván','DPT','2, 3, 4 tháng'],['Bại liệt','OPV / IPV','2, 3, 4 tháng'],['Hib (viêm phổi, màng não)','Hib','2, 3, 4 tháng'],['Sởi, Rubella','MR','9 tháng'],['Viêm não Nhật Bản','JEV','Từ 12 tháng'],['Tiêu chảy do Rota','Rota','2 đến 6 tháng (tùy triển khai)']],
+  thieu:[['Phế cầu','Viêm phổi, viêm màng não, nhiễm khuẩn huyết','Nguyên nhân nhập viện và tử vong hàng đầu ở trẻ nhỏ','Phế cầu là nguyên nhân hàng đầu gây viêm phổi và viêm màng não ở trẻ dưới 2 tuổi. Hiện tiêm chủng mở rộng chưa có mũi này ở nhiều nơi, nên nếu mình muốn phòng bệnh hô hấp nặng cho bé thì cần tiêm dịch vụ ạ.'],
+   ['Não mô cầu','Viêm màng não, sốc nhiễm khuẩn','Diễn tiến rất nhanh, nguy hiểm','Não mô cầu diễn tiến rất nhanh, có bé sáng sốt, chiều đã trở nặng. Nên nếu gia đình muốn yên tâm hơn thì mình nên tiêm thêm mũi này chị nhé.'],
+   ['Cúm mùa','Cúm và biến chứng hô hấp','Trẻ dưới 2 tuổi rất dễ biến chứng','Cúm ở người lớn thường nhẹ, nhưng trẻ nhỏ có thể viêm phổi, bội nhiễm. Hầu hết các bé tiêm dịch vụ đều được khuyên tiêm cúm hằng năm ạ.'],
+   ['Thủy đậu','Thủy đậu và biến chứng','Không có trong tiêm chủng mở rộng',''],
+   ['Viêm gan A','Viêm gan A','Lây qua ăn uống, sinh hoạt','']],
+  note:'Lịch cụ thể do trạm y tế địa phương hướng dẫn.'},
+ {id:'61',ten:'5in1 · 6in1',hoi:'Khách hỏi: "5 trong 1 ở trạm với 6 trong 1 khác gì?"',chot:'6 trong 1: chỉ 1 mũi tiêm mỗi buổi, hoàn thành 3 mũi cơ bản sau khoảng 4 tháng, không phải lên trạm uống OPV.',
+  rows:[['Phòng bệnh','Bạch hầu, ho gà, uốn ván, viêm gan B, Hib','Như bên trạm, thêm bại liệt dạng tiêm (IPV) ngay trong mũi'],['Tên vaccine','5 trong 1: Quinvaxem (Hàn Quốc); SII, ComBefive (Ấn Độ)','6 trong 1: Hexaxim (Pháp); Infanrix Hexa (Bỉ)'],['Mỗi buổi tiêm','5 trong 1 kèm OPV: 1 mũi tiêm và 1 lần uống','1 mũi tiêm'],['Hoàn thành 3 mũi cơ bản','Khoảng 9 tháng (tiêm riêng IPV lúc 5 và 9 tháng)','Khoảng 4 tháng, không cần uống OPV vì IPV đã đủ miễn dịch']],
+  note:'Loại vaccine thực tế tại từng trạm có thể khác nhau tùy đợt cấp.',
+  say:[['6 trong 1','Bên em có 6 trong 1 chỉ 1 mũi tiêm, bé đỡ đau và đỡ phải đi nhiều lần. 3 mũi cơ bản hoàn thành sớm hơn nhiều so với tiêm 5 trong 1 kèm uống bại liệt ạ.']]},
+ {id:'rota',ten:'Rota',hoi:'Khách hỏi: "Rota ở trạm uống rồi, có cần uống thêm không?"',chot:'Rotarix và Rotateq có dữ liệu nghiên cứu đầy đủ hơn, bảo vệ phổ rộng hơn (có chủng G2P mà Rotavin không có).',
+  rows:[['Tên vaccine','Rotavin (Việt Nam)','Rotarix (Bỉ), Rotateq (Mỹ)'],['Đặc tính','Chứa 1 chủng Rota (G1P)','Rotarix: 1 chủng người G1P, tạo miễn dịch chéo với 9 chủng khác. Rotateq (ngũ giá): 5 chủng, trong đó G2P gây viêm dạ dày ruột nặng và đang gia tăng'],['Nổi trội','Bảo vệ 1 chủng, dữ liệu nghiên cứu còn ít','Bảo vệ niêm mạc ruột phổ rộng hơn, nghiên cứu đầy đủ hơn']],
+  say:[['Rota','Rota có 2 lựa chọn dịch vụ là Rotarix và Rotateq. Hai loại này bảo vệ nhiều chủng hơn và có nghiên cứu đầy đủ hơn, trong đó có cả chủng G2P gây tiêu chảy nặng đang gia tăng. Mình tiêm trong khung tuổi bé uống được thì tốt nhất ạ.']]},
+ {id:'pc',ten:'Phế cầu',hoi:'Khách hỏi: "Phế cầu 13 với 20 khác gì?"',chot:'Phế cầu 20 giữ 13 chủng cũ và thêm 7 chủng nguy hiểm, 3 mũi cơ bản bảo vệ toàn diện, sau 2 tuổi chưa cần nhắc.',
+  rows:[['Tên vaccine','Phế cầu 13 (Prevenar 13), thế hệ cũ','Phế cầu 20 (Prevenar 20), thế hệ mới'],['Số chủng','Ngừa 13 chủng','Ngừa 20 chủng (giữ 13 chủng cũ, thêm 7 chủng)'],['Vì sao thêm 7 chủng','—','Là các chủng gây bệnh xâm lấn trên toàn cầu, liên quan viêm màng não, nhiễm khuẩn huyết, viêm phổi nặng; một số chủng tỷ lệ tử vong cao hơn hoặc kháng kháng sinh'],['Lịch tiêm','Chỉ được hỗ trợ 2 mũi cơ bản, chưa chắc đủ miễn dịch cho bé sinh non tháng','3 mũi cơ bản, phù hợp cả bé sinh đủ tháng và sinh non'],['Mũi nhắc','Cần nhắc 1 mũi phế cầu 20 sau 2 tuổi','Đủ miễn dịch nếu tiêm đủ, đúng lịch; sau 2 tuổi chưa cần nhắc']],
+  note:'Cập nhật 2026: Bộ Y tế đang thí điểm đưa phế cầu vào tiêm chủng mở rộng ở một số tỉnh ưu tiên (theo báo chí, chưa thấy Quảng Trị trong danh sách). Hỏi trạm địa phương xem đã có chưa trước khi tư vấn.',
+  say:[['Phế cầu 20','Phế cầu 20 giữ nguyên 13 chủng cũ và thêm 7 chủng gây bệnh nặng như viêm màng não, nhiễm khuẩn huyết. Mình tiêm đủ 3 mũi cơ bản là bảo vệ toàn diện cho bé, sau 2 tuổi chưa cần nhắc thêm ạ.']]},
+ {id:'9t',ten:'Trẻ 9 tháng',hoi:'Khách hỏi: "9 tháng bé cần tiêm gì?"',chot:'Combo 9 tháng: sởi quai bị rubella, thủy đậu, viêm não Nhật Bản. Dịch vụ tiêm được ngay 9 tháng, trạm chỉ phòng sởi và viêm não từ 12 tháng.',
+  rows:[['Sởi, quai bị, rubella','Priorix (Ý): phòng cả 3 bệnh, 9 tháng tiêm được','Mvvac (Việt Nam): chỉ phòng sởi'],['Thủy đậu','Varilrix (Bỉ): 9 tháng tiêm được','Không có'],['Viêm não Nhật Bản','Imojev (Thái Lan): 9 tháng tiêm được','Jevax (Việt Nam): từ 12 tháng, nhắc nhiều mũi, nhiều năm']],
+  swap:true,
+  note:'Vì sao là combo này: miễn dịch từ mẹ giảm sau 6 tháng; bé tiếp xúc môi trường mới nhiều hơn (gửi bà, mẹ đi làm, nhà trẻ); sởi lây rất mạnh (1 người bệnh lây 13–19 người); bé ăn dặm nhiều thứ nên dễ trùng triệu chứng viêm não Nhật Bản.',
+  say:[['Combo 9 tháng','Bé 9 tháng là lúc miễn dịch từ mẹ giảm, bé lại tiếp xúc môi trường mới nhiều hơn. Bên em có combo 9 tháng tiêm được ngay: sởi quai bị rubella, thủy đậu và viêm não Nhật Bản. Mình chọn ngày tiện, em đặt lịch cho bé ạ.']]}];
+function vSS(){const T=SS.find(x=>x.id==ssT)||SS[0],i=SS.indexOf(T),nx=SS[i+1];
+ const cp=(t)=>{const id='c'+(CID++);CP[id]=t;return id};
+ const all=(T.rows?T.rows.map(r=>r[0]+'\n- '+(T.swap?'Dịch vụ':'Trạm y tế')+': '+(T.swap?r[1]:r[1])+'\n- '+(T.swap?'Trạm y tế':'Long Châu')+': '+r[2]).join('\n'):'');
+ let h=`<section class="sec"><h2>Trạm y tế hay Long Châu?</h2><p class="lead" style="font-size:14px">Chọn chủ đề theo câu khách hỏi. Mỗi chủ đề có sẵn: so sánh, điểm chốt và câu nói để gửi khách.</p>
+ <div class="chips">${SS.map(x=>`<button type="button" class="chip" aria-pressed="${x.id==T.id}" data-ss="${x.id}">${esc(x.ten)}</button>`).join('')}</div></section>
+ <section class="sec"><span class="lbl">${esc(T.hoi)}</span><div class="note" style="margin-top:8px"><b>Điểm chốt:</b> ${esc(T.chot)}</div>`;
+ if(T.rows){const a=T.swap?['Dịch vụ Long Châu','Trạm y tế']:['Trạm y tế','Long Châu'];
+  h+=T.rows.map(r=>`<div class="ssr"><div class="ssl">${esc(r[0])}</div><div class="ssc a"><span class="ssh">${a[0]}</span>${esc(r[1])}</div><div class="ssc b"><span class="ssh">${a[1]}</span>${esc(r[2])}</div></div>`).join('');
+  h+=`<div style="text-align:right;margin-top:8px"><button type="button" class="copy" data-c="${cp(T.ten+' ('+a[0]+' và '+a[1]+')\n'+T.rows.map(r=>r[0]+'\n- '+a[0]+': '+r[1]+'\n- '+a[1]+': '+r[2]).join('\n'))}">Sao chép so sánh</button></div>`}
+ if(T.co){h+=`<span class="lbl" style="margin-top:14px">Trạm tiêm miễn phí (tham khảo)</span><div class="ssg">${T.co.map(r=>`<div class="ssi"><b>${esc(r[1])}</b><span>${esc(r[0])}</span><small>${esc(r[2])}</small></div>`).join('')}</div>`;
+  h+=`<span class="lbl" style="margin-top:14px">Chưa có ở trạm, mình tư vấn bổ sung</span>`+T.thieu.map(r=>`<div class="ssr"><div class="ssl">${esc(r[0])}</div><div class="ssc b"><span class="ssh">Phòng bệnh</span>${esc(r[1])}</div><div class="ssc a"><span class="ssh">Ý nghĩa với trẻ dưới 2 tuổi</span>${esc(r[2])}</div>${r[3]?`<div class="ssm">${esc(r[3])}<button type="button" class="copy" data-c="${cp(r[3])}">Sao chép</button></div>`:''}</div>`).join('')}
+ if(T.note)h+=`<p class="lead" style="font-size:13px;margin-top:8px">${esc(T.note)}</p>`;
+ h+='</section>';
+ if(T.say&&T.say.length)h+=`<section class="sec"><span class="lbl">Câu nói gợi ý</span>${T.say.map(x=>say(x[1],x[0])).join('')}</section>`;
+ h+=`<section class="sec" style="display:flex;gap:8px;flex-wrap:wrap">${nx?`<button type="button" class="btn" data-ss="${nx.id}">Chủ đề kế: ${esc(nx.ten)} →</button>`:''}<button type="button" class="btn ghost" data-ss="tq">Về đầu</button></section><p class="lead" style="font-size:12px">Nguồn: tài liệu đào tạo Trung tâm Đào tạo FPT Long Châu. Mục cập nhật 2026 theo báo chí về Quyết định 2780/QĐ-BYT của Bộ Y tế, cần kiểm tra lại tại trạm y tế địa phương.</p>`;
+ return h}
 function vLich(){const S=D.LT[lt],m=dob?months(dob):null;let nextFound=false;
  const days=dob?Math.floor((new Date()-new Date(dob))/864e5):null;
  const items=S.m.map((x,i)=>{const end=(S.m[i+1]||[99])[0];let c='';if(m!=null){if(m>=end)c='past';else if(m>=x[0])c='now';else if(!nextFound){c='next';nextFound=true}}return`<div class="st ${c}"><h3>${esc(x[1])}${c=='now'?'<span class="badge now">Đang đến lịch</span>':c=='next'?'<span class="badge next">Mốc tiếp theo</span>':''}</h3><ul>${x[2].map(v=>`<li>${esc(v)}</li>`).join('')}</ul></div>`}).join('');
@@ -651,6 +652,7 @@ function render(){CID=0;for(const k in CP)delete CP[k];const q=$('#q').value.tri
  if(!q&&SUB.some(x=>x[0]==cur))v.insertAdjacentHTML('afterbegin',`<div class="chips" style="margin:4px 0 14px">${SUB.map(x=>`<button type="button" class="chip" aria-pressed="${x[0]==cur}" data-go="${x[0]}">${esc(x[1])}</button>`).join('')}</div>`);
  v.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{location.hash=b.dataset.go;window.scrollTo(0,0)});
  if(cur=='bao-gia')bindBaoGia(v);
+ if(cur=='so-sanh')v.querySelectorAll('[data-ss]').forEach(b=>b.onclick=()=>{ssT=b.dataset.ss;ls.set('ssT',ssT);render();window.scrollTo(0,0)});
  if(cur=='giam-sat')bindGS2(v);
  v.querySelectorAll('[data-kmx]').forEach(b=>b.onclick=()=>{const k=b.dataset.kmx;kmSel=kmSel.includes(k)?kmSel.filter(x=>x!=k):[...kmSel,k];ls.set('kmx',kmSel);const y=scrollY;render();scrollTo(0,y)});
  {const g=v.querySelector('#kmGop');if(g)g.onchange=()=>{kmGop=g.checked;ls.set('kmgop',kmGop);const y=scrollY;render();scrollTo(0,y)};const mk=v.querySelector('#kmMake');if(mk)mk.onclick=()=>kmMake(mk);if(v.querySelector('.pwrap'))fitPosters();const q=v.querySelector('#bgq');if(q)q.oninput=()=>{const t=q.value.trim().toLowerCase();v.querySelectorAll('.bgg').forEach(x=>{x.style.display=!t||x.dataset.s.includes(t)||x.innerText.toLowerCase().includes(t)?'':'none'})}}
