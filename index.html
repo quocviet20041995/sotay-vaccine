@@ -555,7 +555,7 @@ function vKM(){const K=D.KM;return`<section class="sec"><h2>Khuyến mãi vaccin
 const GAP=[0,1,2,3,null,null,2,null,null];
 let KL=[],kSel=null,kStore='local',kDb=null,kCol=null,kSaveT={},kNew=false;
 const VXS={con:'be-nho',bau:'me-bau',lon:'nguoi-lon',gia:'nguoi-gia'};
-const vxOpts=t=>{const ids=t=='con'?['be-nho','tre-2-8','tre-9-18']:[VXS[t]],seen=new Set(),o=[];ids.forEach(id=>{const g=D.DT.find(x=>x.id==id);if(g)g.vx.forEach(v=>{const n=v[0].replace(/\s*\(\*\)/,''),k=n.replace(/\s*\(.*$/,'').toLowerCase();if(seen.has(k))return;seen.add(k);o.push(n+' ('+v[1]+')')})});return o};
+const vxOpts=(t,ag)=>{const ids=t=='con'?(ag?[{a:'be-nho',b:'tre-2-8',c:'tre-9-18'}[ag]]:['be-nho','tre-2-8','tre-9-18']):[VXS[t]],seen=new Set(),o=[];ids.forEach(id=>{const g=D.DT.find(x=>x.id==id);if(g)g.vx.forEach(v=>{const n=v[0].replace(/\s*\(\*\)/,''),k=n.replace(/\s*\(.*$/,'').toLowerCase();if(seen.has(k))return;seen.add(k);o.push(n+' ('+v[1]+')')})});return o};
 const fmtD=iso=>{if(!iso)return'';const d=new Date(iso);return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')};
 const curK=()=>kSel?(kDraft&&kDraft.id==kSel?kDraft:KL.find(k=>k.id==kSel)):null;
 const model=()=>curK()||Object.assign({loai:csT},MSG);
@@ -689,19 +689,21 @@ function vCS(){if(kDraft&&kSel!=kDraft.id)kDraft=null;const C=D.CS,k=curK(),typ=
  <div class="steps" id="csList">${csMsgs()}</div></section>
  <div class="note"><b>Nhịp nhắn:</b> không quá 1 tin trong 2 ngày. Tin chăm sóc và tin bán xen kẽ nhau. Khách im lặng 2 lần thì tạm dừng 2 tuần rồi quay lại bằng tin theo mùa hoặc ưu đãi mới.</div>`}
 function kPopup(){if(kStore!='db'){if(FB()){alertBox('Cần đăng nhập Gmail để thêm khách. Đang mở cửa sổ đăng nhập…');signIn()}else alertBox('Cần đăng nhập Gmail để thêm khách. Hãy mở sổ tay bằng link quocviet20041995.github.io/sotay-vaccine bằng Chrome hoặc Safari (không mở trong Zalo) rồi đăng nhập.');return}let d=document.getElementById('kNewDlg');if(d)d.remove();d=document.createElement('dialog');d.id='kNewDlg';d.style.cssText='max-width:min(460px,calc(100vw - 24px))';document.body.appendChild(d);
- const vl=v=>{const b=v.replace(/\s*\(.*$/,''),m=v.match(/\(([^()]*)\)\s*$/);return m&&m[1]&&!b.includes(m[1])&&!/^\d|tháng|tuổi|ưu tiên/i.test(m[1])?b+' · '+m[1]:b},st={loai:csT||'con',vx:'',q:''},pn=x=>String(x||'').replace(/\D/g,'').replace(/^84/,'0');
+ const vl=v=>{const b=v.replace(/\s*\(.*$/,''),m=v.match(/\(([^()]*)\)\s*$/);return m&&m[1]&&!b.includes(m[1])&&!/^\d|tháng|tuổi|ưu tiên/i.test(m[1])?b+' · '+m[1]:b},st={loai:csT||'con',vx:'',q:'',tuoi:''},pn=x=>String(x||'').replace(/\D/g,'').replace(/^84/,'0');
  const LT=D.CS.types;
  const draw=()=>{const keep={ten:(d.querySelector('#nTen')||{}).value||'',sdt:(d.querySelector('#nSdt')||{}).value||'',be:(d.querySelector('#nBe')||{}).value||''};
-  const all=vxOpts(st.loai),q=st.q.trim().toLowerCase(),list=all.filter(v=>!q||v.toLowerCase().includes(q));
+  const all=vxOpts(st.loai,st.tuoi),q=st.q.trim().toLowerCase(),list=all.filter(v=>!q||v.toLowerCase().includes(q));
   d.innerHTML=`<div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">Thêm khách mới</h2><button type="button" class="btn ghost" id="nX" aria-label="Đóng">✕</button></div>
   <div class="chips">${LT.map(x=>`<button type="button" class="chip" aria-pressed="${x[0]==st.loai}" data-nl="${x[0]}">${x[1]}</button>`).join('')}</div>
   <div class="field"><label for="nTen">Gọi khách là</label><input id="nTen" placeholder="VD: chị Lan" value="${esc(keep.ten)}"></div>
   <div class="field"><label for="nSdt">SĐT / Zalo</label><input id="nSdt" type="tel" inputmode="tel" placeholder="09xx xxx xxx" value="${esc(keep.sdt)}"></div>
   ${st.loai=='con'?`<div class="field"><label for="nBe">Tên bé</label><input id="nBe" placeholder="VD: bé Bin" value="${esc(keep.be)}"></div>`:''}
+  ${st.loai=='con'?`<div class="field"><label>Tuổi của con</label><div class="chips">${[['','Chưa rõ'],['a','Dưới 2 tuổi'],['b','2–8 tuổi'],['c','9–18 tuổi']].map(x=>`<button type="button" class="chip" aria-pressed="${x[0]==st.tuoi}" data-nt="${x[0]}">${x[1]}</button>`).join('')}</div></div>`:''}
   <div class="field"><label>Vaccine đã tư vấn${st.vx?': <b>'+esc(st.vx=='__khac'?'Khác':vl(st.vx))+'</b>':''}</label><input id="nQ" type="search" placeholder="Gõ để lọc: HPV, phế cầu, cúm…" value="${esc(st.q)}" style="margin-bottom:6px"><div class="chips" style="max-height:170px;overflow:auto;padding:2px">${list.map(v=>`<button type="button" class="chip" aria-pressed="${v==st.vx}" data-nv="${esc(v)}">${esc(vl(v))}</button>`).join('')||'<small>Không có, bấm Khác để tự nhập</small>'}<button type="button" class="chip" aria-pressed="${st.vx=='__khac'}" data-nv="__khac">Khác…</button></div>${st.vx=='__khac'?'<input id="nVx" placeholder="Nhập tên vaccine" style="margin-top:6px">':''}</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="btn ghost" id="nSaveZ">Lưu và mở Zalo</button><button type="button" class="btn" id="nSave">Lưu</button></div></div>`;
   const $q=x=>d.querySelector(x);$q('#nX').onclick=()=>d.close();
-  d.querySelectorAll('[data-nl]').forEach(b=>b.onclick=()=>{st.loai=b.dataset.nl;st.vx='';st.q='';draw()});
+  d.querySelectorAll('[data-nl]').forEach(b=>b.onclick=()=>{st.loai=b.dataset.nl;st.vx='';st.q='';st.tuoi='';draw()});
+  d.querySelectorAll('[data-nt]').forEach(b=>b.onclick=()=>{st.tuoi=b.dataset.nt;st.vx='';draw()});
   d.querySelectorAll('[data-nv]').forEach(b=>b.onclick=()=>{st.vx=st.vx==b.dataset.nv?'':b.dataset.nv;draw();if(st.vx=='__khac')setTimeout(()=>{const i=d.querySelector('#nVx');if(i)i.focus()},30)});
   const qi=$q('#nQ');qi.oninput=()=>{st.q=qi.value;const p=qi.selectionStart;draw();const n=d.querySelector('#nQ');n.focus();n.setSelectionRange(p,p)};
   const save=z=>{const ten=$q('#nTen').value.trim();if(!ten){$q('#nTen').focus();$q('#nTen').style.borderColor='var(--pink)';return}const sdt=$q('#nSdt').value.trim(),p=pn(sdt);
