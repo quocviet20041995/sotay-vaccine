@@ -555,7 +555,7 @@ function vKM(){const K=D.KM;return`<section class="sec"><h2>Khuyến mãi vaccin
 const GAP=[0,1,2,3,null,null,2,null,null];
 let KL=[],kSel=null,kStore='local',kDb=null,kCol=null,kSaveT={},kNew=false;
 const VXS={con:'be-nho',bau:'me-bau',lon:'nguoi-lon',gia:'nguoi-gia'};
-const vxOpts=t=>{const g=D.DT.find(x=>x.id==VXS[t]);return g?g.vx.map(v=>v[0].replace(/\s*\(\*\)/,'')+' ('+v[1]+')'):[]};
+const vxOpts=t=>{const ids=t=='con'?['be-nho','tre-2-8','tre-9-18']:[VXS[t]],seen=new Set(),o=[];ids.forEach(id=>{const g=D.DT.find(x=>x.id==id);if(g)g.vx.forEach(v=>{const n=v[0].replace(/\s*\(\*\)/,''),k=n.replace(/\s*\(.*$/,'').toLowerCase();if(seen.has(k))return;seen.add(k);o.push(n+' ('+v[1]+')')})});return o};
 const fmtD=iso=>{if(!iso)return'';const d=new Date(iso);return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')};
 const curK=()=>kSel?(kDraft&&kDraft.id==kSel?kDraft:KL.find(k=>k.id==kSel)):null;
 const model=()=>curK()||Object.assign({loai:csT},MSG);
